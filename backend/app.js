@@ -24,6 +24,6 @@ app.get("/", (req,res)=>{
 });
 
 import useRoute from './routes/user.routes.js'
-app.use("api/v1/users", useRoute);
+app.use("/api/v1/users", useRoute);
 
 export { app };

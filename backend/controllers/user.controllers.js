@@ -6,11 +6,11 @@ import { generateAccessAndRefreshTokens } from "./controllers_utils/generateAcce
 
 const registerUser = asyncHandler( async ( req, res, next ) => {
     //store the details 
-    const { name, faculty, year, branch, phone, email, password } = req.body;
+    const { name, faculty, year, department, phone, email, password } = req.body;
     console.log("Name : ", name);
 
     //validation
-    if( [ name, faculty, year, branch, phone, email, password ].some( (field) => field?.trim() === "" ) ){
+    if( [ name, faculty, year, department, phone, email, password ].some( (field) => field?.trim() === "" ) ){
         throw new ApiError(400, "All fields are mandatory");
     }
 
@@ -28,7 +28,7 @@ const registerUser = asyncHandler( async ( req, res, next ) => {
         name,
         faculty: faculty.toUpperCase(),
         year,
-        branch,
+        department,
         phone,
         email: email.toLowerCase(),
         password
@@ -40,6 +40,8 @@ const registerUser = asyncHandler( async ( req, res, next ) => {
     if(!createdUser){
         throw new ApiError(500, "Something went wrong while registering the user.");
     }
+
+    console.log(createdUser);
 
     //returing response
     return res.

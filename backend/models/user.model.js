@@ -8,8 +8,9 @@ const userSchema = new Schema({
         required: [true, "You must provide your name to register."]
     },
     faculty: {
-        type: Schema.Types.ObjectId,
-        ref: "Faculty",
+        // type: Schema.Types.ObjectId,
+        // ref: "Faculty",
+        type: String,
         required: true
     },
     year: {

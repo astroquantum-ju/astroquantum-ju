@@ -12,7 +12,7 @@ const generateAccessAndRefreshTokens = ( userId ) => {
     
         return { accessToken, refreshToken };
     } catch (error) {
-        throw new ApiError( 500, "Something went wrong. Access and Refresh tokenscouldnot be genrated. Error ", error?.message );
+        throw new ApiError( 500, "Something went wrong. Access and Refresh tokens couldnot be genrated. Error ", error?.message );
     }
 };
 
