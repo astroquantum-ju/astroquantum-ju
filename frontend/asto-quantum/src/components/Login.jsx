@@ -1,43 +1,38 @@
 import React from 'react';
+import validator from 'validator';
 import axios from 'axios';
 
-function Register() {
+function Login() {
     const list = [
         {
-            name: "Name",
-            dummy: "Vivek Halder"
-        },
-        {
-            name: "Faculty",
-            dummy: "FET"
-        },
-        {
-            name: "Year",
-            dummy: "2"
-        },
-        {
-            name: "Department",
-            dummy: "Information Technology"
-        },
-        {
-            name: "Phone",
-            dummy: "123456890"
-        },
-        {
-            name: "Email",
-            dummy: "xyz@gmail.com"
+            name: "Phone or Email",
         },
         {
             name: "Password",
-            dummy: "Hello123"
         }
     ];
 
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post(import.meta.env.VITE_APP_BACKEND_API_LOGIN_END_POINT, { email: userData.email, phone: userData.phone, password: userData.password });
+
+            if(response && response?.data){
+                setUserData({
+                    email: "",
+                    phone: "",
+                    password: ""
+                });
+            }
+
+            if(!response){
+                console.error("There was an error logging in the user.");
+            }
+        } catch (error) {
+            console.log("Error occured whiling logging the user in. Error ", error?.message);
+        }
+    };
+
     const [userData, setUserData] = React.useState({
-        name: '',
-        faculty: '',
-        year: '',
-        department: '',
         phone: '',
         email: '',
         password: '',
@@ -48,42 +43,46 @@ function Register() {
         const key = event.target.name;
         const value = event.target.value;
         //console.log(key, value);
-        setUserData((prevData) => ({
-            ...prevData,
-            [key.toLowerCase()]: value,
-        }));
+
+        if(key==="phone or email"){
+            if(!value?.trim().length){
+                setUserData((prevData)=> ({
+                    ...prevData,
+                    phone: "",
+                    email: ""
+                }))  
+            }
+            if(validator.isNumeric(value)){
+                setUserData((prevData)=> ({
+                    ...prevData,
+                    phone: value,
+                    email: ""
+                }))
+            }
+            else {
+                if(validator.isEmail(value)){
+                    setUserData((prevData) => ({
+                        ...prevData,
+                        email: value,
+                        phone: ""
+                    }))
+                }
+                // else{
+                //     console.log("inavlid email format");
+                // }
+            }
+        }
+
+        else{
+            setUserData((prevData) => ({
+                ...prevData,
+                [key.toLowerCase()]: value,
+            }));
+        }
+
+        //console.log(userData);
     };
 
-    const handleRegistration = async () => {
-        try {
-            //console.log(import.meta.env.VITE_APP_BACKEND_API_REGISTRATION_END_POINT);
-            //console.log(userData);
-    
-            const response = await axios.post(import.meta.env.VITE_APP_BACKEND_API_REGISTRATION_END_POINT, userData);
-    
-            if (response) {
-                // Check if response.data is not undefined
-                if (response.data) {
-                    setUserData({
-                        name: '',
-                        faculty: '',
-                        year: '',
-                        department: '',
-                        phone: '',
-                        email: '',
-                        password: '',
-                    });
-                } else {
-                    console.log('Error registering the user. response.data is undefined.');
-                }
-            } else {
-                console.log('Error registering the user. response is undefined.');
-            }
-        } catch (error) {
-            console.error('Error registering the user. Error ', error?.message);
-        }
-    };
-    
     return (
         <>
             <div className='flex justify-center items-center h-full'>
@@ -108,21 +107,21 @@ function Register() {
                                     placeholder={element.dummy}
                                     onChange={handleInputChange} // Handle input changes
                                     className='border rounded-md px-3 py-2 w-3/4 mx-auto'
-                                    autoComplete={element.name === 'Password' ? 'new-password' : 'on'}
+                                    autoComplete='on'
                                 />
                             </div>
                         ))}
                     </div>
                     <div className='flex flex-row w-3/4 mx-auto'>
                         <div className='w-2/3 flex justify-begin'>
-                            <h1>Already a member?</h1>
+                            <h1>New to Astro-Quantum JU?</h1>
                         </div>
 
                         <div className='w-1/3 flex justify-end'>
-                            <h1>Log In</h1>
+                            <h1>Join</h1>
                         </div>
                     </div>
-                    <button onClick={handleRegistration} className='m-4 bg-black text-2xl text-white p-2 px-3 rounded-md'>
+                    <button onClick={handleLogin} className='m-4 bg-black text-2xl text-white p-2 px-3 rounded-md'>
                         Join
                     </button>
                 </div>
@@ -131,4 +130,4 @@ function Register() {
     );
 }
 
-export default Register;
+export default Login

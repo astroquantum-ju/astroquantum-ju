@@ -57,9 +57,11 @@ const registerUser = asyncHandler( async ( req, res, next ) => {
 } );
 
 const loginUser = asyncHandler( async ( req, res, next ) => {
+    console.log(req.body); 
     const { email, phone, password } = req.body;
 
-    if( !( email || phone ) ){
+    console.log(email, phone, password);
+    if( !email && !phone ){
         throw new ApiError(400, "Either phone number or email is required.");
     }
 
@@ -68,10 +70,12 @@ const loginUser = asyncHandler( async ( req, res, next ) => {
     })
 
     if(!user){
-        throw new ApiError(404, "User not found");
+        throw new ApiError(404, "Invalid credentials.");
     }
 
-    const isPasswordValid = user.isPasswordCorrect( password );
+    const isPasswordValid = await user.isPasswordCorrect( password );
+
+    console.log("Password is ", isPasswordValid);
 
     if(!isPasswordValid){
         throw new ApiError(401, "Wrong Password");
@@ -81,10 +85,15 @@ const loginUser = asyncHandler( async ( req, res, next ) => {
 
     const loggedInUser = await User.findById( user?._id ).select( "-password -refreshToken" );
 
+    if(!loggedInUser){
+        throw new ApiError(500, "Couldnot login the user.");
+    }
     const options = {
         httpOnly: true,
         secure: true
     };
+
+    //console.log("User logged in.");
 
     return res
     .status(200)
