@@ -1,6 +1,7 @@
 import React from 'react';
 import validator from 'validator';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 function Login() {
     const list = [
@@ -114,11 +115,15 @@ function Login() {
                     </div>
                     <div className='flex flex-row w-3/4 mx-auto'>
                         <div className='w-2/3 flex justify-begin'>
-                            <h1>New to Astro-Quantum JU?</h1>
+                            <h1 className='font-semibold'>
+                                New to Astro-Quantum JU?
+                            </h1>
                         </div>
 
                         <div className='w-1/3 flex justify-end'>
-                            <h1>Join</h1>
+                            <Link to="/register" className='hover:scale-110 hover:underline'>
+                                Join
+                            </Link>
                         </div>
                     </div>
                     <button onClick={handleLogin} className='m-4 bg-black text-2xl text-white p-2 px-3 rounded-md'>

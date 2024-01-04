@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'
 
 function Register() {
     const list = [
@@ -115,11 +116,15 @@ function Register() {
                     </div>
                     <div className='flex flex-row w-3/4 mx-auto'>
                         <div className='w-2/3 flex justify-begin'>
-                            <h1>Already a member?</h1>
+                            <h1 className='font-semibold'>
+                                Already a member?
+                            </h1>
                         </div>
 
                         <div className='w-1/3 flex justify-end'>
-                            <h1>Log In</h1>
+                            <Link to='/login' className='hover:scale-110 hover:underline'>
+                                <h1>Log In</h1>
+                            </Link>
                         </div>
                     </div>
                     <button onClick={handleRegistration} className='m-4 bg-black text-2xl text-white p-2 px-3 rounded-md'>
